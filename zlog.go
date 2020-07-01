@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var SugarLogger *zap.SugaredLogger
+var sugarLogger *zap.SugaredLogger
 
 func makeWriter(filename string) io.Writer {
 	iow, _ := rotatelogs.New(
@@ -48,61 +48,61 @@ func init() {
 	core := zapcore.NewTee(
 		zapcore.NewCore(encoder, zapcore.AddSync(infoWriter), infoLevel),
 	)
-	SugarLogger = zap.New(core, zap.AddCaller()).Sugar()
+	sugarLogger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1)).Sugar()
 }
 
 func Debug(args ...interface{}) {
-	SugarLogger.Debug(args...)
+	sugarLogger.Debug(args...)
 }
 
 func Debugf(template string, args ...interface{}) {
-	SugarLogger.Debugf(template, args...)
+	sugarLogger.Debugf(template, args...)
 }
 
 func Info(args ...interface{}) {
-	SugarLogger.Info(args...)
+	sugarLogger.Info(args...)
 }
 
 func Infof(template string, args ...interface{}) {
-	SugarLogger.Infof(template, args...)
+	sugarLogger.Infof(template, args...)
 }
 
 func Warn(args ...interface{}) {
-	SugarLogger.Warn(args...)
+	sugarLogger.Warn(args...)
 }
 
 func Warnf(template string, args ...interface{}) {
-	SugarLogger.Warnf(template, args...)
+	sugarLogger.Warnf(template, args...)
 }
 
 func Error(args ...interface{}) {
-	SugarLogger.Error(args...)
+	sugarLogger.Error(args...)
 }
 
 func Errorf(template string, args ...interface{}) {
-	SugarLogger.Errorf(template, args...)
+	sugarLogger.Errorf(template, args...)
 }
 
 func DPanic(args ...interface{}) {
-	SugarLogger.DPanic(args...)
+	sugarLogger.DPanic(args...)
 }
 
 func DPanicf(template string, args ...interface{}) {
-	SugarLogger.DPanicf(template, args...)
+	sugarLogger.DPanicf(template, args...)
 }
 
 func Panic(args ...interface{}) {
-	SugarLogger.Panic(args...)
+	sugarLogger.Panic(args...)
 }
 
 func Panicf(template string, args ...interface{}) {
-	SugarLogger.Panicf(template, args...)
+	sugarLogger.Panicf(template, args...)
 }
 
 func Fatal(args ...interface{}) {
-	SugarLogger.Fatal(args...)
+	sugarLogger.Fatal(args...)
 }
 
 func Fatalf(template string, args ...interface{}) {
-	SugarLogger.Fatalf(template, args...)
+	sugarLogger.Fatalf(template, args...)
 }
