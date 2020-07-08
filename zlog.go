@@ -11,19 +11,22 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var sugarLogger *zap.SugaredLogger
+var logger *zap.Logger
+
+func Field(k string, v interface{}) zapcore.Field {
+	return zap.Any(k, v)
+}
 
 func makeWriter(filename string) io.Writer {
-	iow, _ := rotatelogs.New(
+	hook, _ := rotatelogs.New(
 		filename+".%Y%m%d"+".log",
 		rotatelogs.WithRotationCount(30),
 		rotatelogs.WithRotationTime(time.Hour*24),
 	)
-	return iow
+	return hook
 }
 
 func init() {
-
 	encoder := zapcore.NewJSONEncoder(zapcore.EncoderConfig{
 		MessageKey: "msg",
 		LevelKey:   "level",
@@ -48,61 +51,61 @@ func init() {
 	core := zapcore.NewTee(
 		zapcore.NewCore(encoder, zapcore.AddSync(infoWriter), infoLevel),
 	)
-	sugarLogger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1)).Sugar()
+	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 }
 
-func Debug(args ...interface{}) {
-	sugarLogger.Debug(args...)
+func Debug(template string, fields ...zap.Field) {
+	logger.Debug(template, fields...)
 }
 
-func Debugf(template string, args ...interface{}) {
-	sugarLogger.Debugf(template, args...)
+// func Debugf(template string, args ...interface{}) {
+// 	sugarLogger.Debugf(template, args...)
+// }
+
+func Info(template string, fields ...zap.Field) {
+	logger.Info(template, fields...)
 }
 
-func Info(args ...interface{}) {
-	sugarLogger.Info(args...)
+// func Infof(template string, args ...interface{}) {
+// 	sugarLogger.Infof(template, args...)
+// }
+
+func Warn(template string, fields ...zap.Field) {
+	logger.Warn(template, fields...)
 }
 
-func Infof(template string, args ...interface{}) {
-	sugarLogger.Infof(template, args...)
+// func Warnf(template string, args ...interface{}) {
+// 	sugarLogger.Warnf(template, args...)
+// }
+
+func Error(template string, fields ...zap.Field) {
+	logger.Error(template, fields...)
 }
 
-func Warn(args ...interface{}) {
-	sugarLogger.Warn(args...)
+// func Errorf(template string, args ...interface{}) {
+// 	sugarLogger.Errorf(template, args...)
+// }
+
+func DPanic(template string, fields ...zap.Field) {
+	logger.DPanic(template, fields...)
 }
 
-func Warnf(template string, args ...interface{}) {
-	sugarLogger.Warnf(template, args...)
+// func DPanicf(template string, args ...interface{}) {
+// 	sugarLogger.DPanicf(template, args...)
+// }
+
+func Panic(template string, fields ...zap.Field) {
+	logger.Panic(template, fields...)
 }
 
-func Error(args ...interface{}) {
-	sugarLogger.Error(args...)
+// func Panicf(template string, args ...interface{}) {
+// 	sugarLogger.Panicf(template, args...)
+// }
+
+func Fatal(template string, fields ...zap.Field) {
+	logger.Fatal(template, fields...)
 }
 
-func Errorf(template string, args ...interface{}) {
-	sugarLogger.Errorf(template, args...)
-}
-
-func DPanic(args ...interface{}) {
-	sugarLogger.DPanic(args...)
-}
-
-func DPanicf(template string, args ...interface{}) {
-	sugarLogger.DPanicf(template, args...)
-}
-
-func Panic(args ...interface{}) {
-	sugarLogger.Panic(args...)
-}
-
-func Panicf(template string, args ...interface{}) {
-	sugarLogger.Panicf(template, args...)
-}
-
-func Fatal(args ...interface{}) {
-	sugarLogger.Fatal(args...)
-}
-
-func Fatalf(template string, args ...interface{}) {
-	sugarLogger.Fatalf(template, args...)
-}
+// func Fatalf(template string, args ...interface{}) {
+// 	sugarLogger.Fatalf(template, args...)
+// }
