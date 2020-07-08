@@ -3,5 +3,5 @@
 
 ## Example
 func main() {
-	zlog.Debug("hello")
+	zlog.Debug("hello", zlog("name", "jobs"))
 }
